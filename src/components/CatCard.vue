@@ -1,6 +1,6 @@
 <template>
   <div
-    class="cat-card relative w-64 h-80 bg-white rounded-lg shadow-lg overflow-hidden cursor-grab"
+    class="cat-card relative w-64 h-80 bg-white rounded-lg shadow-lg overflow-hidden cursor-grab dark:bg-gray-800"
     @touchstart="handleTouchStart"
     @touchmove="handleTouchMove"
     @touchend="handleTouchEnd"

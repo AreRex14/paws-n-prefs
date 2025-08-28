@@ -36,9 +36,15 @@ watch(
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100 p-4">
-    <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Paws & Preferences</h1>
-    <p class="text-center text-gray-600 mb-8">Swipe right to like, left to dislike!</p>
+  <div
+    class="min-h-screen bg-gradient-to-br from-indigo-100 via-pink-50 to-yellow-100 p-4 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-700"
+  >
+    <h1 class="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-100">
+      Paws & Preferences
+    </h1>
+    <p class="text-center text-gray-600 mb-8 dark:text-gray-300">
+      Swipe right to like, left to dislike!
+    </p>
 
     <SwipeArea
       v-if="!showSummary && catStore.catImageUrls.length > 0"
@@ -51,7 +57,7 @@ watch(
       <LikeSummary />
       <button
         @click="reloadCats"
-        class="mt-6 px-6 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition-colors"
+        class="mt-6 px-6 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition-colors dark:bg-indigo-800 dark:hover:bg-indigo-900"
       >
         Another Round!
       </button>
