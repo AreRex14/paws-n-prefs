@@ -74,4 +74,4 @@ npm run lint
 
 ---
 
-Made with ❤️ by [realloz14](@realloz14.bsky.social)
+Made with ❤️ by [realloz14](https://@realloz14.bsky.social)
