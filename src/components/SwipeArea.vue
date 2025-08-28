@@ -3,6 +3,8 @@ import { useCatStore } from '@/stores/catStore'
 import CatCard from '@/components/CatCard.vue'
 import { computed, watch } from 'vue'
 
+defineProps<{ loading?: boolean }>()
+
 const catStore = useCatStore()
 const currentCatUrl = computed(() => catStore.catImageUrls[0])
 
@@ -37,6 +39,7 @@ watch(
     <CatCard
       v-if="currentCatUrl"
       :imageUrl="currentCatUrl"
+      :disabled="loading"
       @swipe-left="handleSwipeLeft"
       @swipe-right="handleSwipeRight"
     />

@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onUnmounted } from 'vue'
 
 export default defineComponent({
   props: {
@@ -31,6 +31,7 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    disabled: { type: Boolean, default: false },
   },
   setup(props, { emit }) {
     const touchStartX = ref(0)
@@ -41,42 +42,44 @@ export default defineComponent({
 
     // Touch event handlers
     const handleTouchStart = (e: TouchEvent) => {
+      if (props.disabled) return
       touchStartX.value = e.touches[0].clientX
       touchCurrentX.value = touchStartX.value
       isSwiping.value = true
     }
 
     const handleTouchMove = (e: TouchEvent) => {
+      if (props.disabled) return
       touchCurrentX.value = e.touches[0].clientX
       const diff = touchCurrentX.value - touchStartX.value
       swipeStyle.value = { transform: `translateX(${diff}px)` }
     }
 
     const handleTouchEnd = () => {
+      if (props.disabled) return
       isSwiping.value = false
       const diff = touchCurrentX.value - touchStartX.value
-
       if (diff > 50) {
         emit('swipe-right')
       } else if (diff < -50) {
         emit('swipe-left')
       }
-
       swipeStyle.value = { transform: 'translateX(0)' }
     }
 
     // Mouse event handlers
     const handleMouseStart = (e: MouseEvent) => {
+      if (props.disabled) return
       touchStartX.value = e.clientX
       touchCurrentX.value = e.clientX
       isMouseDown.value = true
       isSwiping.value = true
-      // Add event listeners to document for mousemove and mouseup
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseEnd)
     }
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (props.disabled) return
       if (!isMouseDown.value) return
       touchCurrentX.value = e.clientX
       const diff = touchCurrentX.value - touchStartX.value
@@ -84,24 +87,27 @@ export default defineComponent({
     }
 
     const handleMouseEnd = (e: MouseEvent) => {
+      if (props.disabled) return
       if (!isMouseDown.value) return
       isMouseDown.value = false
       isSwiping.value = false
-      // Always update touchCurrentX on mouse up
       touchCurrentX.value = e.clientX
       const diff = touchCurrentX.value - touchStartX.value
-
       if (diff > 50) {
         emit('swipe-right')
       } else if (diff < -50) {
         emit('swipe-left')
       }
-
       swipeStyle.value = { transform: 'translateX(0)' }
-      // prevent memory leaks
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseup', handleMouseEnd)
     }
+
+    // Clean up event listeners when component unmounts
+    onUnmounted(() => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseEnd)
+    })
 
     return {
       handleTouchStart,

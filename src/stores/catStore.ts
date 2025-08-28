@@ -6,10 +6,19 @@ export const useCatStore = defineStore('catStore', {
     likedCats: [] as string[],
     dislikedCats: [] as string[],
     catImageUrls: [] as string[],
+    loading: false,
   }),
   actions: {
     async fetchCatImages(count: number) {
-      this.catImageUrls = await fetchMultipleCatImages(count)
+      this.loading = true
+      try {
+        const urls = await fetchMultipleCatImages(count)
+        this.catImageUrls = urls
+      } catch (error) {
+        console.error('Error fetching cat images:', error)
+      } finally {
+        this.loading = false
+      }
     },
     likeCat(imageUrl: string) {
       this.likedCats.push(imageUrl)
